@@ -1,0 +1,12 @@
+{
+  "name": "go-cms",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "lint": "golint ./...",
+    "dev": "go run cmd/main.go"
+  },
+  "author": "",
+  "license": "ISC"
+}

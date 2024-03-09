@@ -19,10 +19,10 @@ export enum Priority {
 export type PriorityValue = (typeof Priority)[keyof typeof Priority]
 
 const priorityNameMap = {
-  [Priority.ImportantAndUrgent]: "重要/緊急",
-  [Priority.ImportantNotUrgent]: "重要/不緊急",
-  [Priority.NotImportantButUrgent]: "不重要/緊急",
-  [Priority.NotImportantAndNotUrgent]: "不重要/不緊急",
+  [Priority.ImportantAndUrgent]: "重要/緊急(馬上做)",
+  [Priority.ImportantNotUrgent]: "重要/不緊急(授權做)",
+  [Priority.NotImportantButUrgent]: "不重要/緊急(提前做)",
+  [Priority.NotImportantAndNotUrgent]: "不重要/不緊急(拒絕做)",
 }
 
 export const priorityMap = Object.entries(Priority).reduce(

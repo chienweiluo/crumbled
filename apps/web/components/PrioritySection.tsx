@@ -18,7 +18,7 @@ export default function PrioritySection(props: IPrioritySectionProps) {
         Priority.NotImportantAndNotUrgent,
       ].map((priority) => {
         return (
-          <Card>
+          <Card key={priority}>
             <Heading size='3' mb='2'>
               {priorityMap[priority]?.cnName}
             </Heading>
@@ -29,7 +29,7 @@ export default function PrioritySection(props: IPrioritySectionProps) {
                 })
                 .map((item) => {
                   return (
-                    <Card>
+                    <Card key={item.id}>
                       <Text as='div'>{item.title}</Text>
                     </Card>
                   )

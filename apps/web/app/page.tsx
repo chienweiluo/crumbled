@@ -5,23 +5,27 @@ import {
   Heading,
   Box,
   Flex,
-  Card,
   Text,
+  Button,
+  Dialog,
   TextField,
   IconButton,
   Container,
-  MagnifyingGlassIcon,
   ArrowRightIcon,
   SunIcon,
-  CrossCircledIcon,
   CrumpledPaperIcon,
   MoonIcon,
+  FileTextIcon,
+  BookmarkIcon,
 } from "@repo/ui"
 import styles from "./page.module.css"
-import PrioritySection from "./PrioritySection"
-import PriorityDialog, { priorityMap } from "./PriorityDialog"
-import type { PriorityValue } from "./PriorityDialog"
-import { useAppearance } from "./AppearenceProvider"
+import PrioritySection from "../components/PrioritySection"
+import TodoList from "../components/TodoList"
+import PriorityDialog from "../components/PriorityDialog"
+import type { PriorityValue } from "../components/PriorityDialog"
+import { useAppearance } from "../components/AppearenceProvider"
+import { useBreakpoints } from "../hooks/useBreakpoints"
+
 export interface Item {
   title: string
   id: string
@@ -30,6 +34,8 @@ export interface Item {
 
 export default function Page(): JSX.Element {
   const { appearance, toggleAppearance } = useAppearance()
+  const { isXs, isSm } = useBreakpoints()
+
   const [inputValue, setInputValue] = useState("")
   const [list, setList] = useState<Item[]>([])
   const [dialogOpen, setDialogOpen] = useState(false)
@@ -48,14 +54,15 @@ export default function Page(): JSX.Element {
   return (
     <Box className='full-height'>
       <Flex className={styles.header} justify='between' align='center' p='3'>
-        <Heading>
-          <Flex align='center'>
-            <CrumpledPaperIcon height='28' width='28' color='steelblue' />
-            <Text as='span' ml='3'>
-              Crumpled - Task Arrangement Tool
+        <Flex align='center'>
+          <CrumpledPaperIcon height='28' width='28' color='steelblue' />
+          <Box ml='3'>
+            <Heading>Crumpled</Heading>
+            <Text as='p' size='1' color='gray'>
+              Task Arrangement Tool
             </Text>
-          </Flex>
-        </Heading>
+          </Box>
+        </Flex>
         <Box
           className={styles["theme-trigger"]}
           onClick={() => {
@@ -64,11 +71,24 @@ export default function Page(): JSX.Element {
           {appearance === "light" ? <SunIcon /> : <MoonIcon />}
         </Box>
       </Flex>
-      <Flex className={styles.inner} ml='3' mr='3' gap='3'>
-        <Box width='max-content'>
+      <Flex
+        direction={{
+          initial: "column",
+          xs: "column",
+          sm: "row",
+        }}
+        className={styles.inner}
+        ml='3'
+        mr='3'
+        gap='3'>
+        <Box
+          width='100%'
+          style={{
+            maxWidth: "375px",
+          }}>
           <TextField.Root>
             <TextField.Slot>
-              <MagnifyingGlassIcon />
+              <FileTextIcon />
             </TextField.Slot>
             <TextField.Input
               value={inputValue}
@@ -91,27 +111,45 @@ export default function Page(): JSX.Element {
               </IconButton>
             </TextField.Slot>
           </TextField.Root>
-          <Flex mt='3' direction='column' gap='2'>
-            {list.map((item: Item) => {
-              return (
-                <Card key={item.id}>
-                  <Flex justify={"between"} align={"center"}>
-                    {item.title}
-                    <CrossCircledIcon
-                      onClick={() => {
+          {isSm || isXs ? (
+            <Box mt='3'>
+              <Dialog.Root>
+                <Dialog.Trigger>
+                  <Button variant='soft'>
+                    <BookmarkIcon width='16' height='16' />
+                    Show All Items
+                  </Button>
+                </Dialog.Trigger>
+                <Dialog.Content style={{ maxWidth: 450 }}>
+                  <Dialog.Title>All Items</Dialog.Title>
+                  <Flex mt='3' direction='column' gap='2'>
+                    <TodoList
+                      list={list}
+                      onCloseIconClick={(item) => {
                         setList(list.filter((i) => i.id !== item.id))
                       }}
                     />
                   </Flex>
-                  {item.priority && (
-                    <Text size='1' color='gray'>
-                      {priorityMap[item.priority as PriorityValue]?.cnName}
-                    </Text>
-                  )}
-                </Card>
-              )
-            })}
-          </Flex>
+                  <Flex gap='3' mt='4' justify='end'>
+                    <Dialog.Close>
+                      <Button variant='soft' color='gray'>
+                        Cancel
+                      </Button>
+                    </Dialog.Close>
+                  </Flex>
+                </Dialog.Content>
+              </Dialog.Root>
+            </Box>
+          ) : (
+            <Flex mt='3' direction='column' gap='2'>
+              <TodoList
+                list={list}
+                onCloseIconClick={(item) => {
+                  setList(list.filter((i) => i.id !== item.id))
+                }}
+              />
+            </Flex>
+          )}
         </Box>
         <Container height='100%' grow='1'>
           <PrioritySection list={list} />

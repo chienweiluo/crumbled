@@ -6,6 +6,8 @@ import {
   MoonIcon,
   CrossCircledIcon,
   CrumpledPaperIcon,
+  FileTextIcon,
+  BookmarkIcon,
 } from "@radix-ui/react-icons"
 
 export * from "@radix-ui/themes"
@@ -16,4 +18,6 @@ export {
   CrossCircledIcon,
   CrumpledPaperIcon,
   MoonIcon,
+  FileTextIcon,
+  BookmarkIcon,
 }

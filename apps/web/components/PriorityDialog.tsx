@@ -1,6 +1,6 @@
 import * as React from "react"
 import { Flex, Dialog, Button, RadioGroup, Text } from "@repo/ui"
-import type { Item } from "./page"
+import type { Item } from "../app/page"
 
 export interface IPrioirtyDialogProps {
   open: boolean

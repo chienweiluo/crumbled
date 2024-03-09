@@ -1,7 +1,7 @@
 import "./globals.css"
 import type { Metadata } from "next"
 import { Inter } from "next/font/google"
-import { AppearanceProvider } from "./AppearenceProvider"
+import { AppearanceProvider } from "../components/AppearenceProvider"
 
 import "@repo/ui/styles.css"
 

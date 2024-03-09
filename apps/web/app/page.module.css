@@ -1,8 +1,11 @@
-.main {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  align-items: center;
-  padding: 6rem;
-  min-height: 100vh;
+.header {
+  height: 64px;
+}
+
+.inner {
+  height: calc(100% - 64px);
+}
+
+.theme-trigger {
+  cursor: pointer;
 }

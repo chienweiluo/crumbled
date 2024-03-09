@@ -1,7 +1,7 @@
 import * as React from "react"
 import { Heading, Grid, Flex, Card, Text } from "@repo/ui"
 import { Priority, priorityMap } from "./PriorityDialog"
-import type { Item } from "./page"
+import type { Item } from "../app/page"
 
 export interface IPrioritySectionProps {
   list: Item[]

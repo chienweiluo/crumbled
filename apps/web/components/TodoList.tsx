@@ -2,7 +2,7 @@ import * as React from "react"
 import { Flex, Card, Text, CrossCircledIcon } from "@repo/ui"
 import { priorityMap } from "./PriorityDialog"
 import type { PriorityValue } from "./PriorityDialog"
-import type { Item } from "./page"
+import type { Item } from "../app/page"
 
 export interface ITodoListProps {
   list: Item[]

@@ -28,19 +28,14 @@ import PriorityDialog from "../components/PriorityDialog"
 import type { PriorityValue } from "../components/PriorityDialog"
 import { useAppearance } from "../components/AppearenceProvider"
 import { useBreakpoints } from "../hooks/useBreakpoints"
-import { atom, useAtom } from "jotai"
-
+import { useAtom } from "jotai"
+import { listAtom, listDisplaySetting } from "../atoms"
 export interface Item {
   title: string
   id: string
   priority?: PriorityValue
   status?: "done" | "undone" | string
 }
-
-export const listAtom = atom<Item[]>([])
-export const listDisplaySetting = atom({
-  showDoneTasks: true,
-})
 
 export default function Page(): JSX.Element {
   const { appearance, toggleAppearance } = useAppearance()

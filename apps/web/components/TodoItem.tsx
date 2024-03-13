@@ -9,7 +9,7 @@ import {
   Badge,
 } from "@repo/ui"
 import styles from "../app/todoItem.module.css"
-import { listAtom } from "../app/page"
+import { listAtom } from "../atoms"
 import { useAtom } from "jotai"
 
 import type { Item } from "../app/page"

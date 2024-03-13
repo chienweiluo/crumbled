@@ -17,6 +17,9 @@ import {
   MoonIcon,
   FileTextIcon,
   BookmarkIcon,
+  HamburgerMenuIcon,
+  Popover,
+  Checkbox,
 } from "@repo/ui"
 import styles from "./page.module.css"
 import PrioritySection from "../components/PrioritySection"
@@ -25,26 +28,34 @@ import PriorityDialog from "../components/PriorityDialog"
 import type { PriorityValue } from "../components/PriorityDialog"
 import { useAppearance } from "../components/AppearenceProvider"
 import { useBreakpoints } from "../hooks/useBreakpoints"
+import { atom, useAtom } from "jotai"
 
 export interface Item {
   title: string
   id: string
   priority?: PriorityValue
+  status?: "done" | "undone" | string
 }
+
+export const listAtom = atom<Item[]>([])
+export const listDisplaySetting = atom({
+  showDoneTasks: true,
+})
 
 export default function Page(): JSX.Element {
   const { appearance, toggleAppearance } = useAppearance()
   const { isXs, isSm } = useBreakpoints()
 
   const [inputValue, setInputValue] = useState("")
-  const [list, setList] = useState<Item[]>([])
+  const [list, setList] = useAtom(listAtom)
+  const [listDisplay, setListDisplay] = useAtom(listDisplaySetting)
   const [dialogOpen, setDialogOpen] = useState(false)
   const [currentTask, setCurrentTask] = useState<Item | null>(null)
 
   const submit = () => {
     if (!inputValue) return
     const uuid = Math.random().toString(36).substring(7)
-    const newTask = { title: inputValue, id: uuid }
+    const newTask = { title: inputValue, id: uuid, status: "undone" }
     setList([...list, newTask])
     setCurrentTask(newTask)
     setDialogOpen(true)
@@ -86,31 +97,61 @@ export default function Page(): JSX.Element {
           style={{
             maxWidth: "375px",
           }}>
-          <TextField.Root>
-            <TextField.Slot>
-              <FileTextIcon />
-            </TextField.Slot>
-            <TextField.Input
-              value={inputValue}
-              onChange={(e) => setInputValue(e.target.value)}
-              placeholder='type the todo…'
-              onKeyDown={(e) => {
-                if (e.key === "Enter") {
-                  submit()
-                }
-              }}
-            />
-            <TextField.Slot>
-              <IconButton
-                onClick={() => {
-                  submit()
+          <Flex gap='2'>
+            <Popover.Root>
+              <Popover.Trigger>
+                <IconButton variant='soft'>
+                  <HamburgerMenuIcon />
+                </IconButton>
+              </Popover.Trigger>
+              <Popover.Content>
+                <Flex direction='column' gap='2'>
+                  <Text as='label' size='2'>
+                    <Flex gap='2'>
+                      <Checkbox
+                        size='1'
+                        defaultChecked
+                        checked={listDisplay.showDoneTasks}
+                        onCheckedChange={() => {
+                          setListDisplay({
+                            showDoneTasks: !listDisplay.showDoneTasks,
+                          })
+                        }}
+                      />
+                      Show Done Tasks
+                    </Flex>
+                  </Text>
+                </Flex>
+              </Popover.Content>
+            </Popover.Root>
+
+            <TextField.Root>
+              <TextField.Slot>
+                <FileTextIcon />
+              </TextField.Slot>
+              <TextField.Input
+                value={inputValue}
+                onChange={(e) => setInputValue(e.target.value)}
+                placeholder='type the todo…'
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    submit()
+                  }
                 }}
-                size='1'
-                variant='ghost'>
-                <ArrowRightIcon height='14' width='14' />
-              </IconButton>
-            </TextField.Slot>
-          </TextField.Root>
+              />
+              <TextField.Slot>
+                <IconButton
+                  onClick={() => {
+                    submit()
+                  }}
+                  size='1'
+                  variant='ghost'>
+                  <ArrowRightIcon height='14' width='14' />
+                </IconButton>
+              </TextField.Slot>
+            </TextField.Root>
+          </Flex>
+
           {isSm || isXs ? (
             <Box mt='3'>
               <Dialog.Root>
@@ -124,7 +165,11 @@ export default function Page(): JSX.Element {
                   <Dialog.Title>All Items</Dialog.Title>
                   <Flex mt='3' direction='column' gap='2'>
                     <TodoList
-                      list={list}
+                      list={list.filter((item) => {
+                        return listDisplay.showDoneTasks
+                          ? true
+                          : item.status !== "done"
+                      })}
                       onCloseIconClick={(item) => {
                         setList(list.filter((i) => i.id !== item.id))
                       }}
@@ -143,7 +188,11 @@ export default function Page(): JSX.Element {
           ) : (
             <Flex mt='3' direction='column' gap='2'>
               <TodoList
-                list={list}
+                list={list.filter((item) => {
+                  return listDisplay.showDoneTasks
+                    ? true
+                    : item.status !== "done"
+                })}
                 onCloseIconClick={(item) => {
                   setList(list.filter((i) => i.id !== item.id))
                 }}
@@ -152,7 +201,11 @@ export default function Page(): JSX.Element {
           )}
         </Box>
         <Container height='100%' grow='1'>
-          <PrioritySection list={list} />
+          <PrioritySection
+            list={list.filter((item) => {
+              return listDisplay.showDoneTasks ? true : item.status !== "done"
+            })}
+          />
         </Container>
       </Flex>
       {currentTask && (

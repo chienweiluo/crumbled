@@ -8,6 +8,9 @@ import {
   CrumpledPaperIcon,
   FileTextIcon,
   BookmarkIcon,
+  CheckCircledIcon,
+  HamburgerMenuIcon,
+  SymbolIcon,
 } from "@radix-ui/react-icons"
 
 export * from "@radix-ui/themes"
@@ -20,4 +23,7 @@ export {
   MoonIcon,
   FileTextIcon,
   BookmarkIcon,
+  CheckCircledIcon,
+  HamburgerMenuIcon,
+  SymbolIcon,
 }

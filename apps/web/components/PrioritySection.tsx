@@ -1,6 +1,8 @@
 import * as React from "react"
-import { Heading, Grid, Flex, Card, Text } from "@repo/ui"
+import { Heading, Grid, Flex, Card } from "@repo/ui"
 import { Priority, priorityMap } from "./PriorityDialog"
+import TodoItem from "./TodoItem"
+
 import type { Item } from "../app/page"
 
 export interface IPrioritySectionProps {
@@ -29,9 +31,12 @@ export default function PrioritySection(props: IPrioritySectionProps) {
                 })
                 .map((item) => {
                   return (
-                    <Card key={item.id}>
-                      <Text as='div'>{item.title}</Text>
-                    </Card>
+                    <TodoItem
+                      id={item.id}
+                      title={item.title}
+                      showPriority={false}
+                      status={item.status}
+                    />
                   )
                 })}
             </Flex>

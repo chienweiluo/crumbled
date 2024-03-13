@@ -1,6 +1,6 @@
 import * as React from "react"
-import { Flex, Card, Text, CrossCircledIcon } from "@repo/ui"
 import { priorityMap } from "./PriorityDialog"
+import TodoItem from "./TodoItem"
 import type { PriorityValue } from "./PriorityDialog"
 import type { Item } from "../app/page"
 
@@ -16,17 +16,17 @@ export default function TodoList(props: ITodoListProps) {
     <>
       {list.map((item: Item) => {
         return (
-          <Card key={item.id}>
-            <Flex justify={"between"} align={"center"}>
-              {item.title}
-              <CrossCircledIcon onClick={() => onCloseIconClick(item)} />
-            </Flex>
-            {item.priority && (
-              <Text size='1' color='gray'>
-                {priorityMap[item.priority as PriorityValue]?.cnName}
-              </Text>
-            )}
-          </Card>
+          <TodoItem
+            id={item.id}
+            title={item.title}
+            onCloseClick={() => onCloseIconClick(item)}
+            priorityText={
+              item.priority &&
+              priorityMap[item.priority as PriorityValue]?.cnName
+            }
+            showPriority={true}
+            status={item.status}
+          />
         )
       })}
     </>
